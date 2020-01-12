@@ -15,11 +15,9 @@ before_install:
 
 jobs:
   include:
-    - stage: Terraform Verify Install
-      script: terraform -v
-    - stage: Terraform Init
-      script: terraform init $tf_init_cli_options
-    - stage: Terraform Validate
-      script: terraform validate $tf_validation_cli_options
-    - stage: Terraform Plan
-      script: terraform plan $tf_plan_cli_options
+    - stage: Terraform Init and PLan
+      script:
+        - terraform -v
+        - terraform init $tf_init_cli_options
+        - terraform validate $tf_validation_cli_options
+        - terraform plan $tf_plan_cli_options
