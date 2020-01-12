@@ -4,7 +4,7 @@ language: bash
 
 # Export variables
 env:
-  - tf_version=0.12.19 tf_directory:"/terraform/envA" tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
+  - tf_version=0.12.19 tf_directory="/terraform/envA" tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
 # Install dependencies
 before_install:
@@ -19,12 +19,12 @@ jobs:
   include:
     - stage: terraform plan
       # Only run terraform validate and plan state if within a pull request
-      if: TRAVIS_PULL_REQUEST != false
+      if: TRAVIS_PULL_REQUEST != "false"
       script:
         - echo "$TRAVIS_PULL_REQUEST"
         - echo this is an echo "$TRAVIS_PULL_REQUEST"
         - echo this is an echo $TRAVIS_PULL_REQUEST
-        - echo "Executing Terraform Plan on pull request code"
+        - echo "TRAVIS_PULL_REQUEST=false, executing Terraform Plan on pull request code"
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
