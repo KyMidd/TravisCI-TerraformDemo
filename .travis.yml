@@ -17,9 +17,15 @@ before_install:
 jobs:
   include:
     - stage: terraform validate and plan
+      # Only run terraform validate and plan state if within a pull request
+      if: TRAVIS_PULL_REQUEST != false
       script:
-        - terraform -v
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
+    - stage: terraform apply
+      # Only run terraform apply stage if outside of a pull request
+      if: TRAVIS_PULL_REQUEST = false
+      script:
+        - terraform init $tf_init_cli_options
         - terraform apply $tf_apply_cli_options
