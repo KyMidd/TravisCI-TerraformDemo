@@ -6,6 +6,13 @@ language: bash
 env:
   - TF_VERSION=0.12.19 tf_directory:"/terraform/envA" tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
+# Install dependencies
+before_install:
+  - wget https://releases.hashicorp.com/terraform/"$tf_version"/terraform_"$tf_version"_linux_amd64.zip
+  - unzip terraform_"$tf_version"_linux_amd64.zip
+  - sudo mv terraform /usr/local/bin/
+  - rm terraform_"$tf_version"_linux_amd64.zip
+
 # Install Dependencies, including Terraform
 install: sudo ./dependencies/installDependencies.sh $TF_VERSION
 
