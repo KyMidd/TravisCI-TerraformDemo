@@ -13,6 +13,13 @@ before_install:
   - sudo mv terraform /usr/local/bin/
   - rm terraform_"$TF_VERSION"_linux_amd64.zip
 
-deploy:
-  - provider: script
-    script: bash terraform init $tf_init_cli_options
+jobs:
+  include:
+    - stage: Terraform Verify Install
+      script: terraform -v
+    - stage: Terraform Init
+      script: terraform init $tf_init_cli_options
+    - stage: Terraform Validate
+      script: terraform validate $tf_validation_cli_options
+    - stage: Terraform Plan
+      script: terraform plan $tf_plan_cli_options
