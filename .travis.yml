@@ -1,0 +1,84 @@
+# Terraform release pipeline
+variables:
+  tf_directory: '$(System.DefaultWorkingDirectory)/terraform/envA'
+  terraform_version: '0.12.18'
+  tf_init_cli_options: '-input=false'
+  tf_validate_cli_options: ''
+  tf_plan_cli_options: '-lock=false -input=false'
+  tf_apply_cli_options: '-auto-approve -input=false'
+
+# Release instructions
+stages:
+- stage: Terraform_Plan
+  jobs:
+  - deployment: Terraform_Plan
+    displayName: Terraform Plan
+    continueOnError: 'false'
+    environment: 'TerraformPlan_Environment'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+            - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+              displayName: 'Install Terraform'
+              inputs:
+                terraformVersion: $(terraform_version)
+
+            - task: Bash@3
+              displayName: 'Terraform Init'
+              inputs:
+                targetType: 'inline'
+                script: 'terraform init $(tf_init_cli_options)'
+                workingDirectory: $(tf_directory)
+                failOnStderr: true
+
+            - task: Bash@3
+              displayName: 'Terraform Validation'
+              inputs:
+                targetType: 'inline'
+                script: 'terraform validate $(tf_validate_cli_options)'
+                workingDirectory: $(tf_directory)
+                failOnStderr: true
+
+            - task: Bash@3
+              displayName: 'Terraform Plan'
+              inputs:
+                targetType: 'inline'
+                script: 'terraform plan $(tf_plan_cli_options)'
+                workingDirectory: $(tf_directory)
+                failOnStderr: true
+
+- stage: Terraform_Apply
+  jobs:
+  - deployment: Terraform_Apply
+    displayName: Terraform Apply
+    continueOnError: 'false'
+    # Run this stage if previous stage(s) succeeded and build reason ISN'T a pull request
+    condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+    environment: 'YamlTerraformApplyEnvironment'
+    strategy:
+      runOnce:
+        deploy:
+          steps:
+            - checkout: self
+            - task: charleszipp.azure-pipelines-tasks-terraform.azure-pipelines-tasks-terraform-installer.TerraformInstaller@0
+              displayName: 'Install Terraform'
+              inputs:
+                terraformVersion: $(terraform_version)
+
+            - task: Bash@3
+              displayName: 'Terraform Init'
+              inputs:
+                targetType: 'inline'
+                script: 'terraform init $(tf_init_cli_options)'
+                workingDirectory: $(tf_directory)
+                failOnStderr: true
+
+            - task: Bash@3
+              displayName: 'Terraform Apply'
+              inputs:
+                targetType: 'inline'
+                script: 'terraform apply $(tf_apply_cli_options)'
+                workingDirectory: $(tf_directory)
+                failOnStderr: true
