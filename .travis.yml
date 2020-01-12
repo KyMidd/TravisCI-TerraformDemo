@@ -13,9 +13,6 @@ before_install:
   - sudo mv terraform /usr/local/bin/
   - rm terraform_"$TF_VERSION"_linux_amd64.zip
 
-# Install Dependencies, including Terraform
-install: sudo ./dependencies/installDependencies.sh $TF_VERSION
-
 deploy:
   - provider: script
     script: bash terraform init $tf_init_cli_options
