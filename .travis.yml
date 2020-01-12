@@ -19,18 +19,15 @@ jobs:
   include:
     - stage: terraform plan
       # Only run terraform validate and plan state if within a pull request
-      if: TRAVIS_PULL_REQUEST != "false"
+      if: $TRAVIS_PULL_REQUEST != "false"
       script:
-        - echo "$TRAVIS_PULL_REQUEST"
-        - echo this is an echo "$TRAVIS_PULL_REQUEST"
-        - echo this is an echo $TRAVIS_PULL_REQUEST
-        - echo "TRAVIS_PULL_REQUEST=false, executing Terraform Plan on pull request code"
+        - echo "Executing Terraform Plan on pull request code"
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
     - stage: terraform apply
       # Only run terraform apply stage if outside of a pull request
-      if: TRAVIS_PULL_REQUEST = false
+      if: $TRAVIS_PULL_REQUEST = false
       script:
         - echo "Executing Terraform Apply on merged code"
         - terraform init $tf_init_cli_options
