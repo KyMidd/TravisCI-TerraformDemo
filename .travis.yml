@@ -6,7 +6,7 @@ env:
   - TF_VERSION=0.12.19 tf_directory:"/terraform/envA" tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
 
 # Install Dependencies, including Terraform
-install: sudo ./dependencies/installDependencies.sh $TR_VERSION
+install: sudo ./dependencies/installDependencies.sh $TF_VERSION
 
 deploy:
   - provider: script
