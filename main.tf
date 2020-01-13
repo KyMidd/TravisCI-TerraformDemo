@@ -35,3 +35,13 @@ resource "aws_vpc" "aws_vpc" {
     Name = "TravisCiVpc"
   }
 }
+
+# Adding subnet
+resource "aws_subnet" "main" {
+  vpc_id     = aws_vpc.aws_vpc.id
+  cidr_block = "10.50.1.0/24"
+
+  tags = {
+    Name = "TravisCiCreatedSubnet"
+  }
+}
