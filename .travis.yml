@@ -18,7 +18,7 @@ before_install:
 stages:
   - name: terraform plan
     # Only run terraform validate and plan state if within a pull request
-    if: type IN (pull_request, push, api)
+    #if: type IN (pull_request, push, api)
     script:
       - echo "Executing Terraform Plan on pull request code"
       - terraform init $tf_init_cli_options
