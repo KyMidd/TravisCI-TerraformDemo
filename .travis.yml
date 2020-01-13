@@ -2,6 +2,11 @@
 dist: xenial # Ubuntu 16.04
 language: bash
 
+# Only build pushes to master branch
+branches:
+  only:
+    - master
+
 # Export variables
 env:
   - tf_version=0.12.19 tf_directory="/terraform/envA" tf_init_cli_options="-input=false" tf_validation_cli_options="" tf_plan_cli_options="-lock=false -input=false" tf_apply_cli_options="-auto-approve -input=false"
@@ -21,7 +26,7 @@ jobs:
       # Only run terraform validate and plan state if within a pull request
       if: type IN (pull_request)
       script:
-        - echo "Executing Terraform Plan on pull request code"
+        - echo "Pull request detected, creating change plan"
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
         - terraform plan $tf_plan_cli_options
@@ -29,6 +34,6 @@ jobs:
       # Only run terraform apply stage if outside of a pull request
       if: type IN (push) and branch = master
       script:
-        - echo "Executing Terraform Apply on merged code"
+        - echo "Merge detected, executing changes"
         - terraform init $tf_init_cli_options
         - terraform apply $tf_apply_cli_options
