@@ -21,7 +21,7 @@ provider "aws" {
 # Terraform bootstrapping
 module "bootstrap" {
   source                      = "./modules/bootstrap"
-  name_of_s3_bucket           = "travis-ci-bootstrap-s3-kyler"
+  name_of_s3_bucket           = "unique-s3-bucket-name-you-created"
   dynamo_db_table_name        = "aws-locks"
   iam_user_name               = "IamUser"
   ado_iam_role_name           = "IamRole"
