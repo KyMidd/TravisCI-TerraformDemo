@@ -24,7 +24,7 @@ jobs:
   include:
     - stage: terraform plan
       # Only run terraform validate and plan state if within a pull request
-      if: type IN (pull_request)
+      if: type IN (pull_request, api)
       script:
         - echo "Validating Terraform fmt"
         - terraform fmt -recursive -check
