@@ -26,6 +26,8 @@ jobs:
       # Only run terraform validate and plan state if within a pull request
       if: type IN (pull_request)
       script:
+        - echo "Validating Terraform FMT"
+        - terraform fmt -recursive -check
         - echo "Pull request detected, creating change plan"
         - terraform init $tf_init_cli_options
         - terraform validate $tf_validation_cli_options
